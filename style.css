@@ -17,6 +17,10 @@
   -webkit-text-size-adjust: 100%;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 a {
   font-weight: 500;
   color: #646cff;
@@ -56,6 +60,9 @@ canvas {
   justify-content: space-between;
   padding-block: 2rem;
   align-items: center;
+
+  position: fixed;
+  inset-inline: 0;
 }
 
 .header ul[role="navigation"] {
@@ -77,29 +84,44 @@ canvas {
 
 .hero,
 .about,
-.not {
-  padding-block: 6rem;
+.not,
+.bolt {
+  /* padding-block: 6rem; */
+  height: 100vh;
+  max-height: 100vh;
 }
 
 .hero__content,
 .about__content,
-.not__content {
+.not__content,
+.bolt__content {
   max-width: min(100%, 50ch);
 }
 
 .hero__content h1,
 .about__content h1,
-.not__content h1 {
+.not__content h1,
+.bolt__content h1 {
   margin-block-start: 0;
   font-size: clamp(2rem, 2rem + 1vw, 3rem);
   line-height: 1.12;
 }
 
+.hero,
 .about,
-.not {
+.not,
+.bolt {
   display: flex;
+  /* align-items: center; */
+  flex-direction: column;
+  justify-content: center;
 }
 
 .justify-end {
-  justify-content: flex-end;
+  /* justify-content: center; */
+  align-items: flex-end;
+}
+
+section {
+  /* outline: 1px solid red; */
 }

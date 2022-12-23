@@ -9,7 +9,7 @@
   <body>
     <div id="app">
       <div id="canvas-container"></div>
-      <div id="app-container">
+      <div id="app-container" data-animation="page">
         <header class="header container">
           <div class="logo">
             <img src="/vite.svg" />
@@ -17,16 +17,22 @@
           <!-- <div class="logo">Husk experience</div> -->
           <ul role="navigation">
             <li>
-              <a href="/">Home</a>
+              <a href="/#home">Home</a>
             </li>
             <li>
-              <a href="/">About</a>
+              <a href="/#about">About</a>
+            </li>
+            <li>
+              <a href="/#blueprint">Blueprint</a>
+            </li>
+            <li>
+              <a href="/#more">More</a>
             </li>
           </ul>
         </header>
 
         <main>
-          <section class="hero container">
+          <section class="hero container" id="home">
             <div class="hero__content">
               <h1>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</h1>
               <p>
@@ -37,11 +43,8 @@
               </p>
             </div>
           </section>
-          <section
-            class="about justify-end container"
-            style="margin-inline-end: 8rem"
-          >
-            <div class="about__content">
+          <section class="about justify-end container" id="about">
+            <div class="about__content" style="margin-inline-end: 8rem">
               <h1>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</h1>
               <p>
                 Lorem, ipsum dolor sit amet consectetur adipisicing elit.
@@ -51,8 +54,19 @@
               </p>
             </div>
           </section>
-          <section class="not container">
+          <section class="not container" id="blueprint">
             <div class="not__content">
+              <h1>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</h1>
+              <p>
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                Placeat aliquam nesciunt consequuntur vitae, deserunt provident
+                quis cum quo, in dignissimos non aliquid, inventore debitis
+                voluptatem sint necessitatibus tempore sapiente. Similique.
+              </p>
+            </div>
+          </section>
+          <section class="bolt justify-end container" id="more">
+            <div class="bolt__content">
               <h1>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</h1>
               <p>
                 Lorem, ipsum dolor sit amet consectetur adipisicing elit.

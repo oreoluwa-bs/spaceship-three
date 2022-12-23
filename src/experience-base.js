@@ -28,7 +28,6 @@ export default class Experience {
     this.gltfLoader.setDRACOLoader(this.dracoLoader);
 
     this.models = {};
-    this.clones = {};
 
     this.init();
 
@@ -57,7 +56,7 @@ export default class Experience {
           if (o instanceof THREE.Mesh) {
             o.receiveShadow = true;
             o.castShadow = true;
-            o.scale.set(...item.scale);
+            item.scale && o.scale.set(...item.scale);
           }
         });
 
@@ -65,9 +64,6 @@ export default class Experience {
 
         this.scene.add(group);
         this.models[item.name] = group;
-        const clone = group.clone();
-        this.clones[item.name] = clone;
-        this.scenes.wire.add(clone);
       });
     });
   }
@@ -79,54 +75,17 @@ export default class Experience {
   init() {
     this.time = 0;
 
-    const wireframeMaterial = new THREE.MeshBasicMaterial({
-      color: "steelblue",
-      wireframe: true,
-    });
-
     this.scene = new THREE.Scene();
-    this.scenes = {
-      real: this.scene,
-      wire: new THREE.Scene(),
-    };
-    // this.scenes.wire.background = new THREE.Color("steelblue");
-    this.scenes.wire.overrideMaterial = wireframeMaterial;
 
-    this.views = [
-      {
-        height: 1,
-        bottom: 0,
-        scene: this.scenes.real,
-        camera: null,
-      },
-      {
-        height: 0,
-        bottom: 0,
-        scene: this.scenes.wire,
-        camera: null,
-      },
-    ];
+    this.camera = new THREE.PerspectiveCamera(
+      70,
+      this.width / this.height,
+      0.01,
+      10
+    );
 
-    // this.camera = new THREE.PerspectiveCamera(
-    //   70,
-    //   this.width / this.height,
-    //   0.01,
-    //   10
-    // );
-
-    this.views.forEach((view) => {
-      view.camera = new THREE.PerspectiveCamera(
-        70,
-        this.width / this.height,
-        0.01,
-        10
-      );
-      view.camera.position.z = 1;
-    });
-
-    this.camera = this.views[0].camera;
-
-    // this.camera.position.z = 1;
+    this.camera.position.z = 1;
+    // this.camera.position.y = 1;
 
     this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     this.renderer.setSize(this.width, this.height);
@@ -150,8 +109,10 @@ export default class Experience {
     backLight.castShadow = true;
     backLight.shadow.mapSize.width = 1024;
     backLight.shadow.mapSize.height = 1024;
-    frontLight.position.set(20, 20, 20);
-    backLight.position.set(-20, -20, 20);
+    frontLight.position.set(10, 10, 10);
+    backLight.position.set(-10, -10, 10);
+
+    // ambientLight.position(1, 1, 1);
 
     this.scene.add(frontLight);
     this.scene.add(backLight);
@@ -181,31 +142,8 @@ export default class Experience {
   }
 
   setupAnimation() {
-    this.cameras = {
-      _v: this.views.map((view) => view.camera),
-
-      get positions() {
-        return this._v.map((c) => c.position);
-      },
-    };
-
-    this.spaceships = {
-      _v: [this.models.spaceship, this.clones.spaceship].map((item) => item),
-
-      get position() {
-        return this._v.map((c) => c.position);
-      },
-      get rotation() {
-        return this._v.map((c) => c.rotation);
-      },
-    };
-
     // this.models.spaceship.position.y = 0.35;
-    // this.models.spaceship.position.x = 0.3;
-
-    gsap.set(this.spaceships.position, { x: 0.3 });
-    this.spaceships._v.forEach((i) => i.lookAt(this.camera.position));
-
+    this.models.spaceship.position.x = 0.3;
     // this.models.spaceship.lookAt(this.camera.position);
 
     gsapMatchMedia.add(mmStates.notReduceMotion, () => {
@@ -227,7 +165,7 @@ export default class Experience {
     });
 
     tl.to(
-      this.spaceships.position,
+      this.models.spaceship.position,
       {
         x: -0.5,
         // onUpdate: () => {
@@ -236,7 +174,7 @@ export default class Experience {
       },
       section
     ).to(
-      this.spaceships.rotation,
+      this.models.spaceship.rotation,
       {
         y: 1,
       },
@@ -247,45 +185,39 @@ export default class Experience {
     section += 1;
 
     tl.to(
-      this.spaceships.position,
+      this.models.spaceship.position,
       {
         y: -0.1,
         x: 0.5,
       },
       section
-    )
-      .to(
-        this.spaceships.rotation,
-        {
-          // y: 1,
-          x: 1.5,
-        },
-        section
-      )
-      .to(this.views[1], { height: 1, ease: "linear" }, section)
-      .to(this.views[0], { bottom: 0, ease: "linear" }, section);
+    ).to(
+      this.models.spaceship.rotation,
+      {
+        // y: 1,
+        x: 1.5,
+      },
+      section
+    );
 
     //  Section 3
     section += 1;
 
     tl.to(
-      this.spaceships.position,
+      this.models.spaceship.position,
       {
         x: -0.5,
       },
       section
-    )
-      .to(
-        this.spaceships.rotation,
-        {
-          y: -1,
-          // x: -1.5,
-          z: 1,
-        },
-        section
-      )
-      .to(this.views[0], { bottom: 0, height: 1, ease: "linear" }, section)
-      .to(this.views[1], { height: 0, bottom: 1, ease: "linear" }, section);
+    ).to(
+      this.models.spaceship.rotation,
+      {
+        y: -1,
+        // x: -1.5,
+        z: 1,
+      },
+      section
+    );
   }
 
   render() {
@@ -296,17 +228,6 @@ export default class Experience {
 
     this.renderer.render(this.scene, this.camera);
 
-    this.views.forEach((view) => {
-      const h = this.height * view.height;
-      const b = this.height * view.bottom;
-
-      this.renderer.setViewport(0, 0, this.width, this.height);
-      this.renderer.setScissor(0, b, this.width, h);
-      this.renderer.setScissorTest(true);
-
-      this.renderer.render(view.scene, view.camera);
-    });
-
     window.requestAnimationFrame(this.render.bind(this));
   }
 
@@ -315,12 +236,8 @@ export default class Experience {
     this.height = this.container.offsetHeight;
     this.renderer.setSize(this.width, this.height);
 
-    this.views.forEach((view) => {
-      view.camera.aspect = this.width / this.height;
+    this.camera.aspect = this.width / this.height;
 
-      view.camera.updateProjectionMatrix();
-    });
-
-    // this.camera.updateProjectionMatrix();
+    this.camera.updateProjectionMatrix();
   }
 }
