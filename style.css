@@ -5,8 +5,10 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: rgba(5, 5, 5, 1);
+  background-color: white;
+  /* color: rgba(255, 255, 255, 0.87);
+  background-color: #242424; */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -36,4 +38,68 @@ canvas {
 #canvas-container {
   width: 100vw;
   height: 100vh;
+  position: fixed;
+  inset: 0;
+  /* z-index: -1; */
+  pointer-events: none;
+}
+
+.container {
+  max-width: 1204px;
+  margin-inline: auto;
+  padding-inline: 1rem;
+}
+
+.header {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: space-between;
+  padding-block: 2rem;
+  align-items: center;
+}
+
+.header ul[role="navigation"] {
+  display: inline-flex;
+  gap: 1rem;
+  list-style: none;
+}
+
+.header ul[role="navigation"] li a {
+  color: black;
+}
+
+.header .logo {
+  font-weight: bold;
+}
+.header .logo img {
+  height: 50px;
+}
+
+.hero,
+.about,
+.not {
+  padding-block: 6rem;
+}
+
+.hero__content,
+.about__content,
+.not__content {
+  max-width: min(100%, 50ch);
+}
+
+.hero__content h1,
+.about__content h1,
+.not__content h1 {
+  margin-block-start: 0;
+  font-size: clamp(2rem, 2rem + 1vw, 3rem);
+  line-height: 1.12;
+}
+
+.about,
+.not {
+  display: flex;
+}
+
+.justify-end {
+  justify-content: flex-end;
 }

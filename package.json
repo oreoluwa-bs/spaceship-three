@@ -13,6 +13,7 @@
     "vite-plugin-glslify": "^2.0.1"
   },
   "dependencies": {
+    "gsap": "^3.11.4",
     "three": "^0.145.0"
   }
 }
